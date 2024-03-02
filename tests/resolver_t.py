@@ -225,12 +225,14 @@ def mock_responses():
 class Test_SimpleHTTPResolver(loris_t.LorisTest):
 
     def _mock_urls(self):
-        mock_responses()
+        pass
+        #mock_responses()
 
     @responses.activate
+    @pytest.mark.usefixtures('mock_responses')
     def test_simple_http_resolver(self):
 
-        self._mock_urls()
+        #self._mock_urls()
 
         # First we test with no config...
         config = {}
@@ -404,8 +406,9 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
         self.assertRaises(ResolverException, lambda: self.app.resolver.resolve(self.app, ident, ""))
 
     @responses.activate
+    @pytest.mark.usefixtures('mock_responses')
     def test_with_default_format(self):
-        self._mock_urls()
+        #self._mock_urls()
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
             'source_prefix' : 'http://sample.sample/',
@@ -423,8 +426,9 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
         self.assertTrue(isfile(ii.src_img_fp))
 
     @responses.activate
+    @pytest.mark.usefixtures('mock_responses')
     def test_is_resolvable_uses_cached_result(self):
-        self._mock_urls()
+        #self._mock_urls()
 
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
@@ -440,8 +444,9 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
         assert self.app.resolver.is_resolvable(ident='0001')
 
     @responses.activate
+    @pytest.mark.usefixtures('mock_responses')
     def test_without_extra_info(self):
-        self._mock_urls()
+        #self._mock_urls()
 
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
@@ -450,7 +455,7 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
             'default_format' : 'tif',
             'head_resolvable' : True,
             'uri_resolvable' : True,
-            'use_extra_info' : False
+            'use_auth_rules' : False
         }
         self.app.resolver = SimpleHTTPResolver(config)
 
@@ -503,8 +508,8 @@ class TestSimpleHTTPResolver(object):
     @responses.activate
     @pytest.mark.parametrize('ident_regex, ident, expected_resolvable', [
         ('A+', 'bbb.jpg', False),
-        ('\d+', '0001', True),
-        ('\d+Z', '0001', False),
+        (r'\d+', '0001', True),
+        (r'\d+Z', '0001', False),
     ])
     def test_ident_regex_blocks_based_on_ident(self, mock_responses, ident_regex, ident, expected_resolvable):
         config = {

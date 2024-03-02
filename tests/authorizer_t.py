@@ -155,7 +155,7 @@ class Test_RulesAuthorizer(unittest.TestCase):
         self.cookieRequest.path = ".../default.jpg"
 
         self.jwtTokenRequest = MockRequest(
-            headers={"Authorization": b"Bearer " + jwt_tv, "origin": self.origin}
+            headers={"Authorization": "Bearer " + jwt_tv, "origin": self.origin}
         )
         self.jwtCookieRequest = MockRequest(
             headers={"origin": self.origin}, cookies={'iiif_access_cookie': jwt_cv}
@@ -387,7 +387,7 @@ class TestRulesAuthorizerPytest:
         )
 
         headers = {
-            "Authorization": b"Bearer " + bad_token,
+            "Authorization": "Bearer " + bad_token,
             "Origin": "localhost",
         }
 

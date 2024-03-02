@@ -1,16 +1,13 @@
-werkzeug >= 0.11.4
+Werkzeug==3.0.1
 
-# We put an upper bound on the version of Pillow so we can cope with
-# JPEG-compressed TIFFs.
-#
+# This version of Pillow may cause problems with JPEG-compressed TIFFs.
 # See https://github.com/loris-imageserver/loris/issues/405
-pillow >= 2.4.0, < 7.0
+pillow==10.2.0
 
-configobj >= 4.7.2,<=5.0.0
-requests >= 2.12.0
-netaddr >= 0.7.19
-pyjwt >= 1.5.2
-cryptography >= 2.0.3
-
-# We use `attr.ib(converter=callable)` which was added in 17.4.0.
-attrs >= 17.4.0
+configobj==5.0.8
+requests==2.31.0
+netaddr==1.2.1
+PyJWT==2.8.0
+cryptography==42.0.5
+attrs==23.2.0
+pip-tools==7.4.0

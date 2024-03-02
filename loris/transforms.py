@@ -114,7 +114,7 @@ class _AbstractTransformer(object):
         if size_param.canonical_uri_value != 'full':
             wh = [int(size_param.w), int(size_param.h)]
             logger.debug('Resizing to: %r', wh)
-            im = im.resize(wh, resample=Image.ANTIALIAS)
+            im = im.resize(wh, resample=Image.LANCZOS)
 
         rotation_param = image_request.rotation_param()
 
@@ -126,7 +126,7 @@ class _AbstractTransformer(object):
                 embedded_profile = BytesIO(im.info['icc_profile'])
                 im = self._map_im_profile_to_srgb(im, embedded_profile)
         except PyCMSError as err:
-            logger.warn(
+            logger.warning(
                 'Error converting %r (%r) to sRGB: %r',
                 image_request.ident, image_info.src_img_fp, err
             )
@@ -269,7 +269,7 @@ class _AbstractJP2Transformer(_AbstractTransformer):
                 emb_profile = BytesIO(image_info.color_profile_bytes)
                 im = self._map_im_profile_to_srgb(im, emb_profile)
         except PyCMSError as err:
-            logger.warn('Error converting %r to sRGB: %r', im, err)
+            logger.warning('Error converting %r to sRGB: %r', im, err)
 
         #now do any required transformations on the image
         self._derive_with_pil(
@@ -346,7 +346,7 @@ class KakaduJP2Transformer(_AbstractJP2Transformer):
         return 'lib/%s/%s' % (platform.system(),platform.machine())
 
     def _region_to_kdu_arg(self, region_param):
-        '''
+        r'''
         Args:
             region_param (params.RegionParam)
 

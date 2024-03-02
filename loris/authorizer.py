@@ -279,9 +279,9 @@ class RulesAuthorizer(_AbstractAuthorizer):
 
         if self.use_jwt:
             try:
-                value = jwt.decode(cval, secret)
+                value = jwt.decode(cval, secret, algorithms=['HS256'])
             except jwt.ExpiredSignatureError as err:
-                value = jwt.decode(cval, secret, verify=False)
+                value = jwt.decode(cval, secret, verify=False, algorithms=['HS256'])
                 logger.debug(value)
                 raise AuthorizerException("Credentials have expired: %r" % err)
         else:

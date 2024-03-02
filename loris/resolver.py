@@ -267,7 +267,7 @@ class SimpleHTTPResolver(_AbstractResolver):
         else:
             url = self.source_prefix + ident + self.source_suffix
         if not url.startswith(('http://', 'https://')):
-            logger.warn('Bad URL request at %s for identifier: %s.', url, ident)
+            logger.warning('Bad URL request at %s for identifier: %s.', url, ident)
             raise ResolverException(
                 "Bad URL request made for identifier: %r." % ident
             )
@@ -297,7 +297,7 @@ class SimpleHTTPResolver(_AbstractResolver):
             try:
                 extension = self.get_format(ident, constants.FORMATS_BY_MEDIA_TYPE[response.headers['content-type']])
             except KeyError:
-                logger.warn('Your server may be responding with incorrect content-types. Reported %s for ident %s.',
+                logger.warning('Your server may be responding with incorrect content-types. Reported %s for ident %s.',
                             response.headers['content-type'], ident)
                 # Attempt without the content-type
                 extension = self.get_format(ident, None)
@@ -317,7 +317,7 @@ class SimpleHTTPResolver(_AbstractResolver):
 
         with closing(requests.get(source_url, stream=True, **options)) as response:
             if not response.ok:
-                logger.warn(
+                logger.warning(
                     "Source image not found at %s for identifier: %s. "
                     "Status code returned: %s.",
                     source_url, ident, response.status_code
@@ -440,13 +440,13 @@ class TemplateHTTPResolver(SimpleHTTPResolver):
         # but nothing will resolve; is that useful? or should this
         # cause an exception?
         if not templates:
-            logger.warn('No templates specified in configuration')
+            logger.warning('No templates specified in configuration')
         self.templates = {}
         for name in templates.split(','):
             name = name.strip()
             cfg = self.config.get(name, None)
             if cfg is None:
-                logger.warn('No configuration specified for resolver template %s', name)
+                logger.warning('No configuration specified for resolver template %s', name)
             else:
                 self.templates[name] = cfg
         logger.debug('TemplateHTTPResolver templates: %s', self.templates)
@@ -464,7 +464,7 @@ class TemplateHTTPResolver(SimpleHTTPResolver):
         try:
             url_template = self.templates[prefix]['url']
         except KeyError:
-            logger.warn('No template found for identifier: %r.', ident)
+            logger.warning('No template found for identifier: %r.', ident)
             raise ResolverException(
                 "Bad URL request made for identifier: %r." % ident
             )
@@ -476,7 +476,7 @@ class TemplateHTTPResolver(SimpleHTTPResolver):
         except TypeError as e:
             # Raised if there are more parts in the ident than spaces in
             # the template, e.g. '%s' % (1, 2).
-            logger.warn('TypeError raised when processing identifier: %r (%r).', (ident, e))
+            logger.warning('TypeError raised when processing identifier: %r.', ident)
             raise ResolverException(
                 "Bad URL request made for identifier: %r." % ident
             )
@@ -537,7 +537,7 @@ class SourceImageCachingResolver(_AbstractResolver):
 
     def raise_404_for_ident(self, ident):
         source_fp = self.source_file_path(ident)
-        logger.warn(
+        logger.warning(
             "Source image not found at %s for identifier: %s.",
             source_fp, ident
         )

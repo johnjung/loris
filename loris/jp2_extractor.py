@@ -259,7 +259,7 @@ class JP2Extractor(object):
             elif enum_cs == 18:
                 return ([], None)
             else:
-                logger.warn('EnumCS is not a recognised value: %d', enum_cs)
+                logger.warning('EnumCS is not a recognised value: %d', enum_cs)
                 return ([], None)
 
         # Restricted ICC profile.  We have a PROFILE field and then the end

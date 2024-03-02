@@ -9,7 +9,7 @@ from logging import getLogger
 
 from PIL import Image
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
 from loris.webapp import get_debug_config, Loris
 
@@ -20,7 +20,7 @@ class LorisTest(unittest.TestCase):
 
     def build_client_from_config(self, config):
         self.app = Loris(config)
-        self.client = Client(self.app, BaseResponse)
+        self.client = Client(self.app, Response)
 
     def setUp(self):
         self.URI_BASE = 'http://localhost'

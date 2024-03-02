@@ -11,7 +11,7 @@ import pytest
 from werkzeug.datastructures import Headers
 from werkzeug.http import http_date
 from werkzeug.test import Client, EnvironBuilder
-from werkzeug.wrappers import BaseResponse, Request
+from werkzeug.wrappers import Response, Request
 
 from loris import img_info, webapp
 from loris.authorizer import NullAuthorizer
@@ -73,7 +73,7 @@ class TestLoris(loris_t.LorisTest):
 
         client = Client(
             application=webapp.Loris(config),
-            response_wrapper=BaseResponse
+            response_wrapper=Response
         )
 
         resp = client.get("/%s/info.json" % self.test_jpeg_id)
@@ -86,7 +86,7 @@ class TestLoris(loris_t.LorisTest):
 
         client = Client(
             application=webapp.Loris(config),
-            response_wrapper=BaseResponse
+            response_wrapper=Response
         )
 
         resp = client.get("/%s/info.json" % self.test_jpeg_id)
@@ -99,7 +99,7 @@ class TestLoris(loris_t.LorisTest):
 
         client = Client(
             application=webapp.Loris(config),
-            response_wrapper=BaseResponse
+            response_wrapper=Response
         )
 
         resp = client.get("/%s/full/full/0/default.jpg" % self.test_jpeg_id)
@@ -112,7 +112,7 @@ class TestLoris(loris_t.LorisTest):
 
         client = Client(
             application=webapp.Loris(config),
-            response_wrapper=BaseResponse
+            response_wrapper=Response
         )
 
         resp = client.get("/%s/full/full/0/default.jpg" % self.test_jpeg_id)
@@ -124,7 +124,7 @@ class TestLoris(loris_t.LorisTest):
 
         client = Client(
             application=webapp.Loris(config),
-            response_wrapper=BaseResponse
+            response_wrapper=Response
         )
 
         jpg_resp = client.get("/%s/full/full/0/default.jpg" % self.test_jpeg_id)
@@ -476,13 +476,13 @@ class ImageRequests(loris_t.LorisTest):
         self.app.cors_regex = re.compile('calhos')
         to_get = '/%s/full/110,/0/default.jpg' % (self.test_jp2_color_id,)
         resp = self.client.get(to_get)
-        self.assertEquals(resp.headers['Access-Control-Allow-Origin'], 'http://localhost/')
+        self.assertEqual(resp.headers['Access-Control-Allow-Origin'], 'http://localhost/')
 
     def test_cors_regex_no_match(self):
         self.app.cors_regex = re.compile('fooxyz')
         to_get = '/%s/full/120,/0/default.jpg' % (self.test_jp2_color_id,)
         resp = self.client.get(to_get)
-        self.assertFalse(resp.headers.has_key('Access-Control-Allow-Origin'))
+        self.assertFalse('Access-Control-Allow-Origin' in resp.headers)
 
     def test_image_not_found_request(self):
         resp = self.client.get('/foobar/full/full/0/default.jpg')

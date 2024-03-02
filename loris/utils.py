@@ -16,7 +16,7 @@ def symlink(src, dst):
 
     """
     if src == dst:
-        logger.warn(
+        logger.warning(
             'Circular symlink requested from %s to %s; not creating symlink',
             src, dst)
         return

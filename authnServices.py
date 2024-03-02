@@ -10,7 +10,7 @@ except ImportError:
     from urllib.parse import urlencode
     from urllib.request import Request, urlopen
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 try:
     from netaddr import IPNetwork, IPAddress
@@ -139,7 +139,7 @@ class AuthNHandler(object):
 
         if self.use_jwt:          
             value['exp'] = datetime.datetime.utcnow() + datetime.timedelta(seconds=self.cookie_expiresIn)
-            print "Issuing cookie to origin %s, expires at %s" % (origin, value['exp'])
+            print("Issuing cookie to origin %s, expires at %s" % (origin, value['exp']))
             value = jwt.encode(value, secret, algorithm='HS256')
         else:
             key = base64.urlsafe_b64encode(self.kdf().derive(secret))
@@ -193,7 +193,7 @@ class AuthNHandler(object):
 
             if self.use_jwt:
                 token['exp'] = datetime.datetime.utcnow() + datetime.timedelta(seconds=self.token_expiresIn)
-                print "Issuing token to origin %s, expires at %s" % (origin, token['exp'])
+                print("Issuing token to origin %s, expires at %s" % (origin, token['exp']))
                 if self.token_iss:
                     token['iss'] = self.token_iss
                 if self.token_aud:

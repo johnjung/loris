@@ -2,7 +2,7 @@ import logging
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler
 
-import pytest
+import pytest, _pytest
 
 from loris.loris_exception import ConfigError
 from loris.webapp import configure_logging
@@ -71,16 +71,24 @@ class TestLoggingConfig:
 
     def test_valid_console_config_is_okay(self, reset_logger):
         logger = configure_logging(config=valid_console_config)
+        non_pytest_handlers = list(filter(
+            lambda h: not isinstance(h, _pytest.logging.LogCaptureHandler),
+            logger.handlers
+        ))
 
-        assert len(logger.handlers) == 2
-        assert all(isinstance(h, StreamHandler) for h in logger.handlers)
+        assert len(non_pytest_handlers) == 2
+        assert all(isinstance(h, StreamHandler) for h in non_pytest_handlers)
         assert logger.handler_set
 
     def test_valid_file_config_is_okay(self, reset_logger):
         logger = configure_logging(config=valid_file_config)
+        non_pytest_handlers = list(filter(
+            lambda h: not isinstance(h, _pytest.logging.LogCaptureHandler),
+            logger.handlers
+        ))
 
-        assert len(logger.handlers) == 1
-        assert isinstance(logger.handlers[0], RotatingFileHandler)
+        assert len(non_pytest_handlers) == 1
+        assert isinstance(non_pytest_handlers[0], RotatingFileHandler)
         assert logger.handler_set
 
     @pytest.mark.parametrize('config', [
