@@ -224,15 +224,9 @@ def mock_responses():
 
 class Test_SimpleHTTPResolver(loris_t.LorisTest):
 
-    def _mock_urls(self):
-        pass
-        #mock_responses()
-
     @responses.activate
     @pytest.mark.usefixtures('mock_responses')
     def test_simple_http_resolver(self):
-
-        #self._mock_urls()
 
         # First we test with no config...
         config = {}
@@ -408,7 +402,6 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
     @responses.activate
     @pytest.mark.usefixtures('mock_responses')
     def test_with_default_format(self):
-        #self._mock_urls()
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
             'source_prefix' : 'http://sample.sample/',
@@ -428,7 +421,6 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
     @responses.activate
     @pytest.mark.usefixtures('mock_responses')
     def test_is_resolvable_uses_cached_result(self):
-        #self._mock_urls()
 
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
@@ -446,7 +438,6 @@ class Test_SimpleHTTPResolver(loris_t.LorisTest):
     @responses.activate
     @pytest.mark.usefixtures('mock_responses')
     def test_without_extra_info(self):
-        #self._mock_urls()
 
         config = {
             'cache_root' : self.SRC_IMAGE_CACHE,
